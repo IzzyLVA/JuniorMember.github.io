@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CTF Platform</title>
+<style>
+    body {
+        margin: 0;
+        background: #050505;
+        color: #fff;
+        font-family: "Courier New", monospace;
+    }
+
+    .container {
+        padding: 40px;
+    }
+
+    .cards {
+        display: flex;
+        gap: 30px;
+        justify-content: center;
+    }
+
+    .card {
+        width: 260px;
+        height: 160px;
+        border: 1px solid #aa0000;
+        padding: 20px;
+        position: relative;
+        cursor: pointer;
+        transition: 0.3s;
+        background: rgba(255, 0, 0, 0.03);
+    }
+
+    .card:hover {
+        box-shadow: 0 0 15px #ff0000;
+        transform: scale(1.03);
+    }
+
+    .card.selected {
+        border: 2px solid #ff0000;
+        box-shadow: 0 0 20px #ff0000;
+    }
+
+    .tag {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        padding: 3px 8px;
+        font-size: 12px;
+        border: 1px solid #ff0000;
+        color: #ff0000;
+    }
+
+    .title {
+        margin-top: 30px;
+        font-size: 20px;
+    }
+
+    .id {
+        position: absolute;
+        bottom: 10px;
+        font-size: 12px;
+        color: #888;
+    }
+
+    .terminal {
+        margin-top: 80px;
+        border-top: 1px solid #aa0000;
+        padding: 30px;
+        text-align: center;
+    }
+
+    .mission-title {
+        color: #ff0000;
+        font-size: 22px;
+        margin-bottom: 10px;
+    }
+
+    .launch-btn {
+        margin-top: 20px;
+        padding: 12px 25px;
+        background: #aa0000;
+        border: none;
+        color: white;
+        cursor: pointer;
+        font-family: inherit;
+        transition: 0.3s;
+    }
+
+    .launch-btn:hover {
+        background: #ff0000;
+        box-shadow: 0 0 10px #ff0000;
+    }
+
+    .status {
+        position: absolute;
+        right: 20px;
+        bottom: 10px;
+        color: #ff0000;
+        font-size: 12px;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="cards">
+        <div class="card selected" onclick="selectCard(this, 'The Portal')">
+            <div class="tag">EASY</div>
+            <div class="title">The Portal</div>
+            <div class="id">ID: WEB_PORTAL</div>
+        </div>
+
+        <div class="card" onclick="selectCard(this, 'Session Hijack')">
+            <div class="tag">MEDIUM</div>
+            <div class="title">Session Hijack</div>
+            <div class="id">ID: WEB_COOKIES</div>
+        </div>
+
+        <div class="card" onclick="selectCard(this, 'Vault')">
+            <div class="tag">EASY</div>
+            <div class="title">Vault</div>
+            <div class="id">ID: WEB_VAULT</div>
+        </div>
+    </div>
+
+    <div class="terminal">
+        <div class="mission-title" id="missionTitle">MISSION: The Portal</div>
+        <div>Target is accessible via HTTP protocol.</div>
+        <button class="launch-btn" onclick="launch()">LAUNCH TERMINAL</button>
+    </div>
+
+</div>
+
+<div class="status" id="status">STATUS: TARGET_LOCKED</div>
+
+<script>
+    function selectCard(card, title) {
+        document.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+
+        document.getElementById('missionTitle').innerText = "MISSION: " + title;
+        document.getElementById('status').innerText = "STATUS: TARGET_SELECTED";
+    }
+
+    function launch() {
+        document.getElementById('status').innerText = "STATUS: CONNECTING...";
+        
+        setTimeout(() => {
+            document.getElementById('status').innerText = "STATUS: ACCESS_GRANTED";
+            alert("Terminal Launched 🚀");
+        }, 1000);
+    }
+</script>
+
+</body>
+</html>
