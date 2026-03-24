@@ -12,7 +12,49 @@ body {
     font-family: "Courier New", monospace;
 }
 
-/* Main container */
+/* ===== HEADER ===== */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    border-bottom: 1px solid #00ff88;
+    background: rgba(0, 255, 100, 0.03);
+}
+
+/* Title */
+.header-title {
+    color: #00ff88;
+    font-size: 18px;
+    letter-spacing: 3px;
+    text-shadow: 0 0 8px #00ff88;
+}
+
+/* Right side */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 12px;
+    color: #aaa;
+}
+
+/* Login button */
+.login-btn {
+    border: 1px solid #00ff88;
+    padding: 5px 12px;
+    cursor: pointer;
+    color: #00ff88;
+    transition: 0.3s;
+}
+
+.login-btn:hover {
+    background: #00ff88;
+    color: black;
+    box-shadow: 0 0 8px #00ff88;
+}
+
+/* ===== MAIN ===== */
 .container {
     padding: 60px 20px;
     display: flex;
@@ -20,16 +62,15 @@ body {
     align-items: center;
 }
 
-/* ROW layout (this is the key change) */
+/* Cards (row-centered) */
 .cards {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center; /* centers rows */
+    justify-content: center;
     gap: 25px;
-    max-width: 1100px; /* controls how wide rows can get */
+    max-width: 1100px;
 }
 
-/* Card */
 .card {
     width: 250px;
     height: 150px;
@@ -51,7 +92,6 @@ body {
     box-shadow: 0 0 20px #ff0000;
 }
 
-/* Tag */
 .tag {
     position: absolute;
     top: 10px;
@@ -62,7 +102,6 @@ body {
     color: #ff0000;
 }
 
-/* Text */
 .title {
     margin-top: 25px;
     font-size: 18px;
@@ -75,7 +114,7 @@ body {
     color: #777;
 }
 
-/* Terminal (lower + compact) */
+/* Terminal */
 .terminal-wrapper {
     margin-top: 220px;
     opacity: 0;
@@ -133,9 +172,21 @@ body {
 </head>
 <body>
 
+<!-- ===== HEADER ===== -->
+<div class="header">
+    <div class="header-title">
+        JUNIOR MEMBER :: CTF
+    </div>
+
+    <div class="header-right">
+        <span>SYS.ONLINE // v1.0.3</span>
+        <div class="login-btn">LOGIN</div>
+    </div>
+</div>
+
+<!-- ===== MAIN ===== -->
 <div class="container">
 
-    <!-- Cards -->
     <div class="cards">
 
         <div class="card" onclick="selectCard(this, 'The Portal')">
@@ -156,15 +207,8 @@ body {
             <div class="id">ID: WEB_VAULT</div>
         </div>
 
-        <div class="card" onclick="selectCard(this, 'Hidden Panel')">
-            <div class="tag">HARD</div>
-            <div class="title">Hidden Panel</div>
-            <div class="id">ID: WEB_ADMIN</div>
-        </div>
-
     </div>
 
-    <!-- Terminal -->
     <div class="terminal-wrapper" id="terminalWrapper">
         <div class="terminal">
             <div class="mission-title" id="missionTitle"></div>
@@ -187,7 +231,6 @@ let selectedCard = null;
 let selectedChallenge = null;
 
 function selectCard(card, title) {
-    // Toggle off if same card
     if (selectedCard === card) {
         card.classList.remove('selected');
         selectedCard = null;
@@ -198,7 +241,6 @@ function selectCard(card, title) {
         return;
     }
 
-    // Select new
     document.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
     card.classList.add('selected');
 
