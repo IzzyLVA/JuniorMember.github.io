@@ -12,20 +12,25 @@ body {
     font-family: "Courier New", monospace;
 }
 
-/* Layout */
+/* Container */
 .container {
-    padding: 40px;
+    padding: 60px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-/* Grid for many challenges */
+/* Centered grid */
 .cards {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, 250px);
     gap: 25px;
+    justify-content: center;
 }
 
-/* Card style */
+/* Card */
 .card {
+    width: 250px;
     height: 150px;
     border: 1px solid #aa0000;
     padding: 20px;
@@ -37,7 +42,7 @@ body {
 
 .card:hover {
     box-shadow: 0 0 12px #ff0000;
-    transform: scale(1.02);
+    transform: scale(1.03);
 }
 
 .card.selected {
@@ -69,13 +74,15 @@ body {
     color: #777;
 }
 
-/* Terminal Section (hidden initially) */
+/* Terminal wrapper (lower + compact) */
 .terminal-wrapper {
-    margin-top: 120px;
+    margin-top: 200px; /* pushes it further down */
     opacity: 0;
-    transform: translateY(40px);
-    transition: 0.5s ease;
+    transform: translateY(30px);
+    transition: 0.4s ease;
     pointer-events: none;
+    width: 100%;
+    max-width: 600px;
 }
 
 .terminal-wrapper.active {
@@ -87,21 +94,21 @@ body {
 /* Terminal box */
 .terminal {
     border-top: 1px solid #aa0000;
-    padding: 40px;
+    padding: 25px;
     text-align: center;
 }
 
 /* Mission */
 .mission-title {
     color: #ff0000;
-    font-size: 22px;
-    margin-bottom: 10px;
+    font-size: 18px;
+    margin-bottom: 8px;
 }
 
 /* Button */
 .launch-btn {
-    margin-top: 20px;
-    padding: 12px 30px;
+    margin-top: 15px;
+    padding: 10px 25px;
     background: #aa0000;
     border: none;
     color: white;
@@ -112,7 +119,7 @@ body {
 
 .launch-btn:hover {
     background: #ff0000;
-    box-shadow: 0 0 12px #ff0000;
+    box-shadow: 0 0 10px #ff0000;
 }
 
 /* Status */
@@ -130,7 +137,7 @@ body {
 
 <div class="container">
 
-    <!-- Challenge Grid -->
+    <!-- Cards -->
     <div class="cards">
 
         <div class="card" onclick="selectCard(this, 'The Portal')">
@@ -151,15 +158,13 @@ body {
             <div class="id">ID: WEB_VAULT</div>
         </div>
 
-        <!-- Add more cards here easily -->
-
     </div>
 
-    <!-- Terminal Section -->
+    <!-- Terminal -->
     <div class="terminal-wrapper" id="terminalWrapper">
         <div class="terminal">
-            <div class="mission-title" id="missionTitle">MISSION:</div>
-            <div id="missionDesc">Select a challenge to begin.</div>
+            <div class="mission-title" id="missionTitle"></div>
+            <div id="missionDesc"></div>
 
             <button class="launch-btn" onclick="launch()">
                 LAUNCH TERMINAL
@@ -174,12 +179,26 @@ body {
 </div>
 
 <script>
+let selectedCard = null;
 let selectedChallenge = null;
 
 function selectCard(card, title) {
+    // If clicking same card → deselect
+    if (selectedCard === card) {
+        card.classList.remove('selected');
+        selectedCard = null;
+        selectedChallenge = null;
+
+        document.getElementById('terminalWrapper').classList.remove('active');
+        document.getElementById('status').innerText = "STATUS: IDLE";
+        return;
+    }
+
+    // Select new card
     document.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
     card.classList.add('selected');
 
+    selectedCard = card;
     selectedChallenge = title;
 
     document.getElementById('missionTitle').innerText = "MISSION: " + title;
@@ -187,7 +206,6 @@ function selectCard(card, title) {
 
     document.getElementById('status').innerText = "STATUS: TARGET_SELECTED";
 
-    // Show terminal
     document.getElementById('terminalWrapper').classList.add('active');
 }
 
