@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Junior Memeber CTF</title>
+
+<style>
+body {
+    margin: 0;
+    background: #050505;
+    color: #fff;
+    font-family: "Courier New", monospace;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    border-bottom: 1px solid #aa0000;
+    background: rgba(0, 255, 100, 0.03);
+    position: relative;
+}
+
+.header-title {
+    color: #ff0000;
+    font-size: 18px;
+    letter-spacing: 3px;
+    text-shadow: 0 0 8px #ff0000;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 12px;
+    color: #aaa;
+}
+
+.login-btn {
+    border: 1px solid #aa0000;
+    padding: 5px 12px;
+    cursor: pointer;
+    color: #ff0000;
+}
+
+.login-btn:hover {
+    background: #ff0000;
+    color: black;
+    box-shadow: 0 0 8px #ff0000;
+}
+
+.header-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.reset-btn {
+    border: 1px solid #aa0000;
+    background: transparent;
+    color: #ff0000;
+    padding: 5px 15px;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.reset-btn:hover {
+    background: #ff0000;
+    color: black;
+    box-shadow: 0 0 8px #ff0000;
+}
+
+.container {
+    padding: 60px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 25px;
+    max-width: 1100px;
+}
+
+.card {
+    width: 250px;
+    height: 150px;
+    border: 1px solid #aa0000;
+    padding: 20px;
+    position: relative;
+    cursor: pointer;
+    transition: 0.3s;
+    background: rgba(255, 0, 0, 0.03);
+}
+
+.card:hover {
+    box-shadow: 0 0 12px #ff0000;
+    transform: scale(1.03);
+}
+
+.card.selected {
+    border: 2px solid #ff0000;
+    box-shadow: 0 0 20px #ff0000;
+}
+
+.card.disabled {
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+.tag {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 11px;
+    padding: 3px 8px;
+    border: 1px solid #ff0000;
+    color: #ff0000;
+}
+
+.title {
+    margin-top: 25px;
+    font-size: 18px;
+}
+
+.id {
+    position: absolute;
+    bottom: 10px;
+    font-size: 11px;
+    color: #777;
+}
+
+.terminal-wrapper {
+    margin-top: 220px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: 0.4s ease;
+    pointer-events: none;
+    width: 100%;
+    max-width: 600px;
+}
+
+.terminal-wrapper.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+}
+
+.terminal {
+    border-top: 1px solid #aa0000;
+    padding: 25px;
+    text-align: center;
+}
+
+.mission-title {
+    color: #ff0000;
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.launch-btn {
+    margin-top: 15px;
+    padding: 10px 25px;
+    background: #aa0000;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.launch-btn:hover {
+    background: #ff0000;
+    box-shadow: 0 0 10px #ff0000;
+}
+
+.status {
+    position: fixed;
+    right: 20px;
+    bottom: 15px;
+    color: #ff0000;
+    font-size: 12px;
+}
+
+/* feedback */
+#flagMessage {
+    margin-top: 10px;
+    font-size: 13px;
+    height: 20px;
+}
+
+.flag-error {
+    color: #ff0000;
+    animation: shake 0.3s;
+}
+
+.flag-success {
+    color: #00ff88;
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+
+#flagInput.flag-error {
+    border: 1px solid #ff0000;
+    box-shadow: 0 0 8px #ff0000;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <div class="header-title">JUNIOR MEMBER :: CTF</div>
+
+    <div class="header-center">
+        <button onclick="window.location.href='/reset'" class="reset-btn">RESET</button>
+    </div>
+
+    <div class="header-right">
+        <span>SYS.ONLINE // v1.0.3</span>
+        <div class="login-btn">LOGIN</div>
+    </div>
+</div>
+
+<div class="container">
+<div class="cards">
+
+<div class="card {% if solved.portal %}disabled{% endif %}" onclick="selectCard(this,'The Portal')">
+    <div class="tag">EASY</div>
+    <div class="title">The Portal</div>
+    <div class="id">ID: WEB_PORTAL</div>
+</div>
+
+<div class="card {% if solved.cookies %}disabled{% endif %}" onclick="selectCard(this,'Session Hijack')">
+    <div class="tag">MEDIUM</div>
+    <div class="title">Session Hijack</div>
+    <div class="id">ID: WEB_COOKIES</div>
+</div>
+
+<div class="card {% if solved.vault %}disabled{% endif %}" onclick="selectCard(this,'Vault')">
+    <div class="tag">EASY</div>
+    <div class="title">Vault</div>
+    <div class="id">ID: WEB_VAULT</div>
+</div>
+
+</div>
+
+<div class="terminal-wrapper" id="terminalWrapper">
+<div class="terminal">
+
+<div class="mission-title" id="missionTitle"></div>
+<div id="missionDesc"></div>
+
+<button class="launch-btn" onclick="launch()">LAUNCH TERMINAL</button>
+
+<form id="flagForm" style="margin-top:20px;">
+    <input type="hidden" id="challengeInput">
+
+    <input id="flagInput" type="text" placeholder="ENTER FLAG..."
+    style="padding:10px; width:65%; background:black; color:#fff; border:1px solid #aa0000; font-family:inherit;">
+
+    <button type="submit" class="launch-btn" style="padding:10px;">SUBMIT</button>
+</form>
+
+<div id="flagMessage"></div>
+
+</div>
+</div>
+</div>
+
+<div class="status" id="status">STATUS: IDLE</div>
+
+<script>
+let selectedCard = null;
+let selectedChallenge = null;
+
+function selectCard(card, title) {
+    if (card.classList.contains("disabled")) return;
+
+    document.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+
+    selectedCard = card;
+
+    if (title === "The Portal") selectedChallenge = "portal";
+    else if (title === "Session Hijack") selectedChallenge = "cookies";
+    else if (title === "Vault") selectedChallenge = "vault";
+
+    document.getElementById("challengeInput").value = selectedChallenge;
+
+    document.getElementById('missionTitle').innerText = "MISSION: " + title;
+    document.getElementById('missionDesc').innerText = "Target ready. Awaiting connection...";
+    document.getElementById('status').innerText = "STATUS: TARGET_SELECTED";
+
+    document.getElementById('terminalWrapper').classList.add('active');
+}
+
+function launch() {
+    if (!selectedChallenge) return;
+
+    let route = "";
+    if (selectedChallenge === "portal") route = "/challenge/portal";
+    else if (selectedChallenge === "cookies") route = "/challenge/cookies";
+    else if (selectedChallenge === "vault") route = "/challenge/vault";
+
+    window.open(route, "_blank");
+}
+
+document.getElementById("flagForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const flagInput = document.getElementById("flagInput");
+    const flag = flagInput.value;
+    const challenge = document.getElementById("challengeInput").value;
+    const msg = document.getElementById("flagMessage");
+
+    const res = await fetch("/submit_flag", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `flag=${encodeURIComponent(flag)}&challenge=${challenge}`
+    });
+
+    if (res.ok) {
+        msg.className = "flag-success";
+        msg.innerText = "ACCESS GRANTED";
+        setTimeout(() => location.reload(), 700);
+    } else {
+        msg.className = "flag-error";
+        msg.innerText = "INCORRECT FLAG";
+
+        flagInput.style.animation = "none";
+        flagInput.offsetHeight;
+        flagInput.style.animation = "shake 0.3s";
+
+        flagInput.classList.add("flag-error");
+        setTimeout(() => flagInput.classList.remove("flag-error"), 500);
+
+        flagInput.value = "";
+    }
+});
+</script>
+
+</body>
+</html>
